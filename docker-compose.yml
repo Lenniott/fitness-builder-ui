@@ -1,0 +1,39 @@
+# Fitness Builder UI - Docker Compose
+# 
+# Requirements:
+# - Easy deployment with environment configuration
+# - Portainer-compatible setup
+# - Environment variables for API endpoints
+# 
+# Flow:
+# - Build and run the UI container
+# - Configure API endpoints via environment variables
+# - Expose port 8888 for web access
+
+version: '3.8'
+
+services:
+  fitness-builder-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fitness-builder-ui
+    ports:
+      - "8888:8888"
+    environment:
+      # API Configuration - Update these for your environment
+      - VITE_API_BASE_URL=http://192.168.0.47:8000/api/v1
+      - VITE_API_ROOT_URL=http://192.168.0.47:8000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8888/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - fitness-network
+
+networks:
+  fitness-network:
+    external: true 

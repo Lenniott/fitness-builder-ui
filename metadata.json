@@ -1,0 +1,5 @@
+{
+  "name": "Fitness Builder UI",
+  "description": "A web interface to manage fitness exercises and routines with an AI-powered backend. Features a card-swipe interface for browsing exercises and tools for creating custom workout plans.",
+  "requestFramePermissions": []
+}
