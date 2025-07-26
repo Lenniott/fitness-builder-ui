@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2024-08-01
+
+### Added
+- **Automatic Network Detection**: The app now automatically detects which network you're on and uses the appropriate API endpoint.
+- **Multi-Network Support**: Added support for localhost, local network, and Tailscale access with automatic switching.
+- **Network-Specific Environment Variables**: New environment variables for different network scenarios.
+
+### Changed
+- **Constants Configuration**: Updated `constants.ts` to implement automatic network detection based on hostname.
+- **Docker Configuration**: Updated Docker files to support the new network-specific environment variables.
+- **Environment Guide**: Completely rewrote `ENVIRONMENT.md` to document the new automatic detection system.
+
+### Technical Details
+- **Localhost Detection**: When accessing via `localhost` → Uses `VITE_API_BASE_URL_LOCAL`
+- **Network Detection**: When accessing via `192.168.x.x` → Uses `VITE_API_BASE_URL_NETWORK`
+- **Tailscale Detection**: When accessing via `100.x.x.x` → Uses `VITE_API_BASE_URL_TAILSCALE`
+- **Legacy Support**: Still supports the old single environment variable approach for backward compatibility.
+
+## [1.4.0] - 2024-08-01
+
+### Security
+- **Removed Hardcoded IP Addresses**: Eliminated hardcoded IP addresses from source code to improve security and deployment flexibility.
+- **Environment Variable Configuration**: All API endpoints now configured purely through environment variables.
+- **Git Security**: No sensitive network information committed to repository.
+
+### Changed
+- **Constants Configuration**: Updated `constants.ts` to use only environment variables with localhost fallback for development.
+- **Docker Configuration**: Updated `docker-compose.yml` to use environment variable substitution instead of hardcoded values.
+- **Environment Guide**: Completely rewrote `ENVIRONMENT.md` with security best practices and flexible deployment scenarios.
+
+### Added
+- **Security Best Practices**: Added comprehensive guide for secure deployment without hardcoded values.
+- **Flexible Deployment**: Support for multiple deployment scenarios (local, Tailscale, network, production) through environment variables only.
+
+## [1.3.0] - 2024-08-01
+
+### Fixed
+- **Video Loading**: Fixed video loading by configuring environment variables to point to the correct API server IP address (192.168.0.47:8000).
+- **Environment Configuration**: Updated `.env.local` with proper API URLs for remote server access.
+- **Duplicate Files**: Cleaned up duplicate files with "2" suffixes that were accidentally created during development.
+
+### Added
+- **Remote API Support**: Added configuration for accessing API server over network (Tailscale/local network).
+- **Environment Variables**: Added `VITE_API_BASE_URL` and `VITE_API_ROOT_URL` to `.env.local` for proper API routing.
+
 ## [1.2.0] - 2024-08-01
 
 ### Fixed
