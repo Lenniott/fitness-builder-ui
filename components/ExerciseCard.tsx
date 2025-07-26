@@ -5,9 +5,9 @@
  * fitness level and intensity, along with instructional text.
  * It is designed to be used in the swiping interface of ExercisesView.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import type { Exercise } from '../types';
-import { API_ROOT_URL } from '../constants';
+import { getVideoUrl, getFallbackVideoUrl } from '../utils/videoUtils';
 
 interface ExerciseCardProps {
   exercise: Exercise;
@@ -24,22 +24,37 @@ const Stat: React.FC<{ label: string; value: React.ReactNode }> = ({ label, valu
 );
 
 const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise }) => {
+  const [videoError, setVideoError] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(() => getVideoUrl(exercise.video_path));
+
+  const handleVideoError = () => {
+    console.warn(`Video failed to load: ${exercise.video_path}`);
+    setVideoError(true);
+    setVideoUrl(getFallbackVideoUrl(exercise.video_path));
+  };
+
   return (
     <div className="w-full h-full bg-dark-card rounded-xl shadow-lg overflow-hidden flex flex-col">
       <div className="relative h-1/2">
         <video
           key={exercise.video_path}
           className="w-full h-full object-cover"
-          src={`${API_ROOT_URL}/${exercise.video_path}`}
+          src={videoUrl}
           autoPlay
           loop
           muted
           playsInline
+          onError={handleVideoError}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-dark-card to-transparent"></div>
         <h2 className="absolute bottom-4 left-4 text-2xl font-bold text-white drop-shadow-lg">
           {exercise.exercise_name}
         </h2>
+        {videoError && (
+          <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded text-xs">
+            Video Unavailable
+          </div>
+        )}
       </div>
 
       <div className="p-4 flex-grow overflow-y-auto">

@@ -17,12 +17,16 @@ All notable changes to this project will be documented in this file.
 - **Tailwind Configuration**: Added `tailwind.config.js` and `postcss.config.js` for proper CSS processing.
 - **Docker Support**: Added Dockerfile, docker-compose.yml, and .dockerignore for containerized deployment.
 - **Portainer Integration**: Configured for easy deployment through Portainer UI.
+- **Video Handling**: Added videoUtils.ts for proper video URL construction and error handling.
+- **Tailscale Support**: Added configuration support for Tailscale remote access.
+- **Environment Guide**: Created ENVIRONMENT.md with comprehensive deployment scenarios.
 
 ### Changed
 - **Default API Address**: Changed default API address from hardcoded IP to `localhost:8000` for better development experience.
 - **README**: Updated with environment configuration and Docker deployment instructions.
 - **CSS Processing**: Updated from CDN Tailwind to proper npm package with PostCSS integration.
 - **Port Configuration**: Set container port to 8888 for easy access.
+- **Video Error Handling**: Enhanced ExerciseCard with fallback video URLs and error indicators.
 
 ## [1.1.0] - 2024-08-01
 

@@ -7,7 +7,7 @@
 
 // Environment-based API configuration
 const getApiConfig = () => {
-  // Check for environment variables first (for production/docker)
+  // Check for environment variables first (for production/docker/tailscale)
   if (import.meta.env.VITE_API_BASE_URL) {
     return {
       baseUrl: import.meta.env.VITE_API_BASE_URL,

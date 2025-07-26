@@ -81,3 +81,24 @@ The application uses environment variables to configure API endpoints:
 - **Development:** Uses `localhost:8000` by default
 - **Production:** Uses environment variables or falls back to `localhost:8000`
 - **Docker:** Configure via `VITE_API_BASE_URL` and `VITE_API_ROOT_URL`
+- **Tailscale:** Use your Tailscale IP for remote access
+
+#### Example Configurations
+
+**Local Network:**
+```bash
+VITE_API_BASE_URL=http://192.168.0.47:8000/api/v1
+VITE_API_ROOT_URL=http://192.168.0.47:8000
+```
+
+**Tailscale Remote Access:**
+```bash
+VITE_API_BASE_URL=http://100.x.x.x:8000/api/v1
+VITE_API_ROOT_URL=http://100.x.x.x:8000
+```
+
+**Public Domain:**
+```bash
+VITE_API_BASE_URL=https://your-domain.com/api/v1
+VITE_API_ROOT_URL=https://your-domain.com
+```
