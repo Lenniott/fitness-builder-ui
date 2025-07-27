@@ -1,19 +1,20 @@
 /**
  * @file RoutineCard.tsx
- * This component displays a summary of a generated workout routine.
- * It is a collapsible card that shows the user's initial prompt,
- * duration, and intensity. When expanded, it lists all the exercises
+ * This component displays a summary of a user-curated workout routine.
+ * It is a collapsible card that shows the routine name, description,
+ * and associated exercises. When expanded, it lists all the exercises
  * included in the routine and provides a button to start the workout.
  */
 import React, { useState } from 'react';
-import type { Routine } from '../types';
+import type { Routine, Exercise } from '../types';
 
 interface RoutineCardProps {
   routine: Routine;
+  exercises: Exercise[];
   onStartWorkout?: (routine: Routine) => void;
 }
 
-const RoutineCard: React.FC<RoutineCardProps> = ({ routine, onStartWorkout }) => {
+const RoutineCard: React.FC<RoutineCardProps> = ({ routine, exercises, onStartWorkout }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -26,31 +27,61 @@ const RoutineCard: React.FC<RoutineCardProps> = ({ routine, onStartWorkout }) =>
       >
         <div className="flex justify-between items-start">
             <div>
-                <p className="text-xs text-medium-text uppercase">{routine.intensity_level} Intensity</p>
-                <h3 className="text-xl font-bold text-light-text">{routine.user_requirements}</h3>
+                <h3 className="text-xl font-bold text-light-text">{routine.name}</h3>
+                {routine.description && (
+                  <p className="text-sm text-medium-text mt-1">{routine.description}</p>
+                )}
             </div>
             <div className="text-right flex-shrink-0 ml-4">
-                 <p className="text-xs text-medium-text">Duration</p>
-                 <p className="text-lg font-semibold text-brand-primary">{Math.round(routine.target_duration / 60)} min</p>
+                 <p className="text-xs text-medium-text">Exercises</p>
+                 <p className="text-lg font-semibold text-brand-primary">{routine.exercise_ids.length}</p>
             </div>
         </div>
         <p className="text-xs text-medium-text mt-2">
-            {routine.routine.exercises.length} exercises &bull; Created on {new Date(routine.created_at).toLocaleDateString()}
+            Created on {new Date(routine.created_at).toLocaleDateString()}
         </p>
       </button>
       
       {isExpanded && (
         <div id={`routine-details-${routine.routine_id}`} className="p-4 border-t border-dark-border">
+          <div className="mb-4">
+            <h4 className="font-semibold text-lg mb-2 text-brand-secondary">Routine Details:</h4>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <p className="text-medium-text">Total Exercises:</p>
+                <p className="text-light-text font-semibold">{routine.exercise_ids.length}</p>
+              </div>
+              <div>
+                <p className="text-medium-text">Created:</p>
+                <p className="text-light-text font-semibold">{new Date(routine.created_at).toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+
           <h4 className="font-semibold text-lg mb-2 text-brand-secondary">Exercises in this routine:</h4>
-          <ul className="space-y-4 mb-4">
-            {routine.routine.exercises.map((ex, index) => (
-              <li key={index} className="bg-gray-800 p-3 rounded-md">
-                <p className="font-bold text-light-text">{ex.order}. {ex.exercise_name}</p>
-                <p className="text-sm text-medium-text mt-1"><span className="font-semibold">Reps:</span> {ex.rounds_reps}</p>
-                <p className="text-sm text-medium-text mt-1"><span className="font-semibold">How-to:</span> {ex.how_to}</p>
-              </li>
-            ))}
-          </ul>
+          {exercises.length > 0 ? (
+            <ul className="space-y-4 mb-4">
+              {exercises.map((exercise, index) => (
+                <li key={exercise.id} className="bg-gray-800 p-3 rounded-md">
+                  <div className="flex justify-between items-start mb-2">
+                    <p className="font-bold text-light-text">{index + 1}. {exercise.exercise_name}</p>
+                    <div className="text-xs text-medium-text">
+                      <span className="bg-brand-primary text-dark-bg px-2 py-1 rounded">Lvl {exercise.fitness_level}</span>
+                      <span className="bg-brand-secondary text-dark-bg px-2 py-1 rounded ml-1">Int {exercise.intensity}</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-medium-text mb-2"><span className="font-semibold">Reps:</span> {exercise.rounds_reps}</p>
+                  <p className="text-sm text-medium-text mb-2"><span className="font-semibold">How-to:</span> {exercise.how_to}</p>
+                  <p className="text-sm text-medium-text"><span className="font-semibold">Benefits:</span> {exercise.benefits}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-center py-8 text-medium-text">
+              <p>No exercises found for this routine.</p>
+            </div>
+          )}
+
           {onStartWorkout && (
             <button
                 onClick={() => onStartWorkout(routine)}

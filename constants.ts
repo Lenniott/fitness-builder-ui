@@ -8,7 +8,7 @@
 // Environment-based API configuration with automatic network detection
 const getApiConfig = () => {
   // Check for specific environment variables first
-  const localUrl = import.meta.env.VITE_API_BASE_URL_LOCAL || 'http://localhost:8000';
+  const localUrl = import.meta.env.VITE_API_BASE_URL_LOCAL || 'http://192.168.0.47:8000';
   const networkUrl = import.meta.env.VITE_API_BASE_URL_NETWORK || 'http://192.168.0.47:8000';
   const tailscaleUrl = import.meta.env.VITE_API_BASE_URL_TAILSCALE || 'http://100.106.26.92:8000';
   
