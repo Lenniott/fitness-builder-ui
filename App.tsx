@@ -14,7 +14,6 @@ import ExerciseCycleView from './components/ExerciseCycleView';
 import RoutineWorkoutView from './components/RoutineWorkoutView';
 import type { View, CycleContext, Exercise, Routine } from './types';
 
-
 const App: React.FC = () => {
   const [view, setView] = useState<View>('exercises');
   const [cycleContext, setCycleContext] = useState<CycleContext>(null);
@@ -30,6 +29,15 @@ const App: React.FC = () => {
   const handleExitCycle = useCallback(() => {
     setCycleContext(null);
   }, []);
+
+  // Enhanced setView that exits cycle when navigating
+  const handleViewChange = useCallback((newView: View) => {
+    // If we're in a cycle and navigating to a different view, exit the cycle
+    if (cycleContext && newView !== view) {
+      setCycleContext(null);
+    }
+    setView(newView);
+  }, [cycleContext, view]);
 
   const renderCurrentView = () => {
     // If we are in a cycle/workout view, render that above everything.
@@ -63,7 +71,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-dark-bg text-light-text font-sans">
-      <Header activeView={view} setView={setView} />
+      <Header activeView={view} setView={handleViewChange} />
       <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {renderCurrentView()}
       </main>

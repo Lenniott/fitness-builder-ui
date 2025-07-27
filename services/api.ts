@@ -8,7 +8,6 @@ import { API_BASE_URL } from '../constants';
 import type { 
     Exercise, 
     Routine, 
-    GenerateRoutinePayload, 
     ProcessVideoPayload, 
     ProcessResponse, 
     JobStatus,
@@ -17,7 +16,13 @@ import type {
     BatchDeleteParams,
     PurgeParams,
     DeletionPreviewResponse,
-    DeletionResult
+    DeletionResult,
+    StoryGenerationPayload,
+    StoryGenerationResponse,
+    SemanticSearchIdsPayload,
+    SemanticSearchIdsResponse,
+    CreateRoutinePayload,
+    BulkExercisePayload
 } from '../types';
 
 /**
@@ -59,17 +64,48 @@ export const deleteExercise = async (exerciseId: string): Promise<{ detail: stri
     return response.json();
 };
 
+/**
+ * Generates exercise requirement stories from user prompt.
+ */
+export const generateStories = async (payload: StoryGenerationPayload): Promise<StoryGenerationResponse> => {
+    const response = await fetch(`${API_BASE_URL}/stories/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    return handleResponse<StoryGenerationResponse>(response);
+};
 
 /**
- * Generates a new workout routine based on a user prompt.
+ * Searches for exercises using semantic search and returns only IDs.
  */
-export const generateRoutine = async (payload: GenerateRoutinePayload): Promise<Routine> => {
-    const response = await fetch(`${API_BASE_URL}/generate-routine`, {
+export const semanticSearchIds = async (payload: SemanticSearchIdsPayload): Promise<SemanticSearchIdsResponse> => {
+    const response = await fetch(`${API_BASE_URL}/exercises/semantic-search-ids`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    return handleResponse<SemanticSearchIdsResponse>(response);
+};
+
+/**
+ * Creates a new routine with exercise IDs.
+ */
+export const createRoutine = async (payload: CreateRoutinePayload): Promise<Routine> => {
+    const response = await fetch(`${API_BASE_URL}/routines`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
     });
     return handleResponse<Routine>(response);
+};
+
+/**
+ * Fetches all routines.
+ */
+export const getRoutines = async (limit: number = 50): Promise<Routine[]> => {
+    const response = await fetch(`${API_BASE_URL}/routines?limit=${limit}`);
+    return handleResponse<Routine[]>(response);
 };
 
 /**
@@ -79,6 +115,30 @@ export const getRoutine = async (routineId: string): Promise<Routine> => {
     const response = await fetch(`${API_BASE_URL}/routines/${routineId}`);
     return handleResponse<Routine>(response);
 };
+
+/**
+ * Deletes a routine by its ID.
+ */
+export const deleteRoutine = async (routineId: string): Promise<{ message: string }> => {
+    const response = await fetch(`${API_BASE_URL}/routines/${routineId}`, {
+        method: 'DELETE',
+    });
+    return handleResponse<{ message: string }>(response);
+};
+
+/**
+ * Fetches multiple exercises by their IDs.
+ */
+export const getExercisesByIds = async (payload: BulkExercisePayload): Promise<Exercise[]> => {
+    const response = await fetch(`${API_BASE_URL}/exercises/bulk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    return handleResponse<Exercise[]>(response);
+};
+
+
 
 /**
  * Submits a video URL for processing into exercises.

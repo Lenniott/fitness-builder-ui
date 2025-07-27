@@ -24,7 +24,7 @@ const Section: React.FC<{ title: string, description: string, children: React.Re
 
 const ManageView: React.FC = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Section title="Search Exercises" description="Find specific exercises using keyword or semantic search.">
         <SearchExercises />
       </Section>
@@ -33,7 +33,7 @@ const ManageView: React.FC = () => {
         <BatchOperations />
       </Section>
       
-      <Section title="Generate New Routine" description="Describe your fitness goals and let AI build the perfect workout plan for you.">
+      <Section title="Create New Routine" description="Describe your fitness goals, choose from AI-generated exercise stories, and curate your perfect workout routine.">
         <CreateRoutineForm />
       </Section>
       

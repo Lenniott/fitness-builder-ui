@@ -25,54 +25,61 @@ export interface Exercise {
 }
 
 /**
- * Represents an exercise within the context of a generated routine.
+ * Represents a generated story for exercise requirements.
  */
-export interface RoutineExercise {
-  order: number;
-  exercise_name: string;
-  how_to: string;
-  benefits: string;
-  counteracts: string;
-  fitness_level: number;
-  rounds_reps: string;
-  intensity: number;
+export interface ExerciseStory {
+  story: string;
 }
 
 /**
- * Represents a complete, AI-generated workout routine.
+ * Response from story generation endpoint.
+ */
+export interface StoryGenerationResponse {
+  stories: string[];
+}
+
+/**
+ * Response from semantic search by IDs endpoint.
+ */
+export interface SemanticSearchIdsResponse {
+  exercise_ids: string[];
+  total_found: number;
+}
+
+/**
+ * Payload for story generation.
+ */
+export interface StoryGenerationPayload {
+  user_prompt: string;
+  story_count: number;
+}
+
+/**
+ * Payload for semantic search by IDs.
+ */
+export interface SemanticSearchIdsPayload {
+  query: string;
+  limit: number;
+}
+
+/**
+ * Represents a user-curated routine.
  */
 export interface Routine {
-  success: boolean;
   routine_id: string;
-  routine: {
-    exercises: RoutineExercise[];
-    metadata: {
-      total_exercises: number;
-      database_operations: {
-        database_ids: string[];
-        qdrant_ids: string[];
-        video_paths: string[];
-      };
-    };
-  };
-  user_requirements: string;
-  target_duration: number;
-  intensity_level: string;
+  name: string;
+  description: string;
+  exercise_ids: string[];
   created_at: string;
-  processing_time: number;
 }
 
-
 /**
- * Payload for generating a new routine.
+ * Payload for creating a routine.
  */
-export interface GenerateRoutinePayload {
-    user_prompt: string;
-    target_duration: number;
-    intensity_level: string;
-    exercises_per_story?: number;
-    initial_limit?: number;
-    score_threshold?: number;
+export interface CreateRoutinePayload {
+  name: string;
+  description: string;
+  exercise_ids: string[];
 }
 
 /**
@@ -150,6 +157,13 @@ export interface SemanticSearchPayload {
   query: string;
   limit?: number;
   score_threshold?: number;
+}
+
+/**
+ * Payload for bulk exercise fetching.
+ */
+export interface BulkExercisePayload {
+  exercise_ids: string[];
 }
 
 /**
